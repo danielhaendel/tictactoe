@@ -1,0 +1,57 @@
+/* Setze die Höhe von html und body auf 100% */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: Open Sans, Arial, sans-serif;
+    background-color: #323232;
+    margin: 0;
+}
+
+h1 {
+    text-align: center;
+    color: #ffffff;
+}
+
+.content {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Stil für die Tabelle */
+table {
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+td {
+    width: 100px;
+    height: 100px;
+    text-align: center;         /* Horizontale Zentrierung */
+    vertical-align: middle;     /* Vertikale Zentrierung */
+    position: relative;         /* Ermöglicht absolute Positionierung innerhalb */
+    cursor: pointer;
+    border-right: 2px solid #ffffff;
+    border-bottom: 2px solid #ffffff;
+}
+
+/* Entfernen der rechten Rahmen für die letzte Zelle jeder Zeile */
+td:last-child {
+    border-right: none;
+}
+
+/* Entfernen der unteren Rahmen für die Zellen in der letzten Zeile */
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Hover-Effekt für leere Zellen */
+td:hover {
+    background-color: #5a5a5a;
+}

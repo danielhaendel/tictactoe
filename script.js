@@ -1,7 +1,7 @@
 let fields = [
-    'cross',  null,    'circle',
-    null,     'cross', null,
-    'circle', null,    'cross'
+    'cross', null, 'circle',
+    null, 'cross', null,
+    'circle', null, 'cross'
 ];
 
 let pencilSound = new Audio('sounds/pencil.mp3');

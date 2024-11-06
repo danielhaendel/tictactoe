@@ -7,10 +7,22 @@ let fields = [
 
 let pencilSound = new Audio('sounds/pencil.mp3');
 let winSound = new Audio('sounds/win.mp3');
-let currentPlayer = 'circle';
+
+// Verwende einen Getter und Setter für currentPlayer
+let _currentPlayer = 'circle';
+Object.defineProperty(window, 'currentPlayer', {
+    get: function () {
+        return _currentPlayer;
+    },
+    set: function (value) {
+        _currentPlayer = value;
+        changePlayer(); // Aktualisiere die Spieleranzeige
+    }
+});
 
 function init() {
     render();
+    changePlayer(); // Initialisiere die Spieleranzeige
 }
 
 function render() {
@@ -54,10 +66,12 @@ function handleClick(cell, index) {
             winSound.play();
             disableAllClicks();
             drawWinningLine(result);
+            document.getElementById('restart-btn').classList.remove('d-none');
             setTimeout(() => {
             }, 100);
         } else if (result === 'draw') {
             // Unentschieden
+            document.getElementById('restart-btn').classList.remove('d-none');
             setTimeout(() => {
             }, 100);
         } else {
@@ -69,9 +83,9 @@ function handleClick(cell, index) {
 
 function checkWin() {
     const winPatterns = [
-        [0,1,2], [3,4,5], [6,7,8], // Zeilen
-        [0,3,6], [1,4,7], [2,5,8], // Spalten
-        [0,4,8], [2,4,6]           // Diagonalen
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Zeilen
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Spalten
+        [0, 4, 8], [2, 4, 6]           // Diagonalen
     ];
 
     for (let pattern of winPatterns) {
@@ -110,19 +124,18 @@ function drawWinningLine(winningPattern) {
 
     // Bestimme die Positionen der Linie basierend auf dem Gewinnmuster
     const positions = {
-        0: { x: "17%", y: "20%" },
-        1: { x: "50%", y: "20%" },
-        2: { x: "83.33%", y: "20%" },
-        3: { x: "17%", y: "50%" },
-        4: { x: "50%", y: "50%" },
-        5: { x: "83.33%", y: "50%" },
-        6: { x: "17%", y: "79%" },
-        7: { x: "50%", y: "79%" },
-        8: { x: "83.33%", y: "79%" }
+        0: {x: "17%", y: "20%"},
+        1: {x: "50%", y: "20%"},
+        2: {x: "83%", y: "20%"},
+        3: {x: "17%", y: "50%"},
+        4: {x: "50%", y: "50%"},
+        5: {x: "83%", y: "50%"},
+        6: {x: "17%", y: "80%"},
+        7: {x: "50%", y: "80%"},
+        8: {x: "83%", y: "80%"}
     };
 
     const start = positions[winningPattern[0]];
-    const middle = positions[winningPattern[1]];
     const end = positions[winningPattern[2]];
 
     // Setze die Start- und Endpunkte der Linie
@@ -162,6 +175,57 @@ function disableAllClicks() {
     }
 }
 
+// Neue Funktion: changePlayer()
+function changePlayer() {
+    // Generiere die statischen SVGs ohne Animation
+    let circleIcon = generateStaticCircleSVG();
+    let crossIcon = generateStaticCrossSVG();
+
+    if (currentPlayer === 'circle') {
+        // Kreis ist an der Reihe
+        document.getElementById('player-circle').innerHTML = circleIcon;
+        document.getElementById('player-cross').innerHTML = crossIcon;
+
+        document.getElementById('player-circle').style.opacity = '1';
+        document.getElementById('player-cross').style.opacity = '0.2';
+    } else {
+        // Kreuz ist an der Reihe
+        document.getElementById('player-circle').innerHTML = circleIcon;
+        document.getElementById('player-cross').innerHTML = crossIcon;
+
+        document.getElementById('player-circle').style.opacity = '0.2';
+        document.getElementById('player-cross').style.opacity = '1';
+    }
+}
+
+// Generiere statisches Kreis-SVG ohne Animation
+function generateStaticCircleSVG() {
+    const color = '#00B0EF'; // Farbe des Kreises
+    const radius = 30; // Radius des Kreises
+
+    const svgCode = `
+    <svg width="70" height="70">
+        <circle cx="35" cy="35" r="${radius}" stroke="${color}" stroke-width="5" fill="none" />
+    </svg>
+    `;
+    return svgCode;
+}
+
+// Generiere statisches Kreuz-SVG ohne Animation
+function generateStaticCrossSVG() {
+    const color = '#FFC000'; // Farbe des Kreuzes
+
+    const svgCode = `
+    <svg width="70" height="70">
+        <!-- Erste Linie -->
+        <line x1="10" y1="10" x2="60" y2="60" stroke="${color}" stroke-width="5" stroke-linecap="round" />
+        <!-- Zweite Linie -->
+        <line x1="60" y1="10" x2="10" y2="60" stroke="${color}" stroke-width="5" stroke-linecap="round" />
+    </svg>
+    `;
+    return svgCode;
+}
+
 function generateCircleSVG() {
     const color = '#00B0EF'; // Farbe des Kreises
     const radius = 30; // Radius des Kreises
@@ -198,6 +262,17 @@ function generateCrossSVG() {
     </svg>
     `;
     return svgCode;
+}
+
+function reset() {
+    fields = [
+        null, null, null,
+        null, null, null,
+        null, null, null
+    ];
+    currentPlayer = 'circle';
+    render();
+    document.getElementById('restart-btn').classList.add('d-none');
 }
 
 // Initialisierung des Spiels

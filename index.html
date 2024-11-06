@@ -7,7 +7,16 @@
 </head>
 <body onload="init();">
 <h1>Tic Tac Toe</h1>
+<!-- Spieleranzeige -->
+<div class="player-Display" id="playerDisplay">
+    <div id="player-circle" style="margin-right: 20px;"></div>
+    <div id="player-cross"></div>
+</div>
 <div class="content" id="content"></div>
+<div class="btn-group">
+    <div class="invisible-div"></div>
+    <button class="btn d-none" id="restart-btn" onclick="reset();">Erneut Spielen</button>
+</div>
 <script src="script.js"></script>
 </body>
 </html>
